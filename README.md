@@ -2,8 +2,8 @@
 ## spring-boot-dubbo 框架 是基于dubbo 协议对内提供服务和基于restful 封装对外提供服务访问 
 
 ### spring-boot-api  jar 封装服务对外的API和公共功能
-1.提供统一返回模版
-2.提供统一参数模版
+  1.提供统一返回模版
+  2.提供统一参数模版
 
 ### spring-boot-common jar 封装StringUtil,BeanUtil等组件化功能模块
 1.提供StringUtil,BeanUtil等基础组件封装
