@@ -1,0 +1,7 @@
+# Project exclude paths
+/spring-boot-api/target/
+/spring-boot-common/target/
+/spring-boot-core/target/
+/spring-boot-dao/target/
+/spring-boot-job-core/target/
+/spring-boot-starter-dubbo/target/

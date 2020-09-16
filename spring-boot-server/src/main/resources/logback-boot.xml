@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration debug="false" scan="true">
+    <!-- 日志级别 -->
+    <springProperty scope="context" name="LOG_ROOT_LEVEL" source="logging.level.root" defaultValue="DEBUG"/>
+    <!--  标识这个"STDOUT" 将会添加到这个logger -->
+    <springProperty scope="context" name="STDOUT" source="log.stdout" defaultValue="STDOUT"/>
+    <!-- 日志格式，%d：日期；%thread：线程名；%-5level：日志级别从左显示5个字符长度，列如:DEBUG；
+        %logger{36}：java类名，例如:com.muses.taoshop.MyTest，36表示字符长度；%msg：日志内容；%n：换行 -->
+<!--
+    <property name="LOG_PATTERN"  value="%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n" />
+-->
+    <!-- root日志级别-->
+    <property name="${LOG_ROOT_LEVEL}" value="INFO" />
+    <!-- 日志跟目录 -->
+    <property name="LOG_HOME" value="data/logs" />
+    <!-- 日志文件路径-->
+    <property name="LOG_DIR" value="${LOG_HOME}/%d{yyyyMMdd}" />
+    <!-- 日志文件名称 -->
+    <property name="LOG_PREFIX" value="server" />
+    <!-- 日志文件编码 -->
+    <property name="LOG_CHARSET" value="utf-8" />
+
+    <!-- 打印到控制台 -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- 格式化日志内容-->
+        <encoder>
+            <springProfile name="dev">
+                <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{40} - %msg%n</pattern>
+            </springProfile>
+            <springProfile name="!dev">
+                <pattern>%d{yyyy-MM-dd HH24:mm:ss.SSS} {%thread} %-5level %logger{50} - %msg%n</pattern>
+            </springProfile>
+        </encoder>
+    </appender>
+    <!-- 打印所有日志，保存到文件-->
+    <appender name="FILE_ALL" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/dubbo-server-file_${LOG_PREFIX}.log</file>
+        <!-- 设置滚动策略，当日志文件大小超过${MAX_FILE_SIZE}时，新的日志内容写到新的日志文件-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 新的日志文件路径名称，%d:日期 %i:i是变量 -->
+            <fileNamePattern>${LOG_DIR}/all_${LOG_PREFIX}%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!-- 保存日志15天 -->
+            <maxHistory>${MAX_HISTORY}</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy  class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!-- 日志文件的最大大小 -->
+                <maxFileSize>1GB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <!--日志文件最大的大小-->
+<!--        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <MaxFileSize>1GB</MaxFileSize>
+        </triggeringPolicy>-->
+        <!-- 格式日志文件内容-->
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
+            <pattern> %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- 打印错误日志，保存到文件-->
+    <appender name="FILE_ERR"  class="ch.qos.logback.core.rolling.RollingFileAppender"  >
+        <file>${LOG_HOME}/dubbo-server-err_${LOG_PREFIX}.log</file>
+        <!-- 设置滚动策略，当日志文件大小超过${MAX_FILE_SIZE}时，新的日志内容写到新的日志文件-->
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- 新的日志文件路径名称，%d:日期 %i:i是变量 -->
+            <fileNamePattern>${LOG_DIR}/err_${LOG_PREFIX}%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!-- 保存日志15天 -->
+            <maxHistory>${MAX_HISTORY}</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy  class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <!-- 日志文件的最大大小 -->
+                <maxFileSize>100MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+        <!--日志文件最大的大小-->
+<!--        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
+            <MaxFileSize>100MB</MaxFileSize>
+        </triggeringPolicy>-->
+        <!-- 格式日志文件内容-->
+        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <!--格式化输出：%d表示日期，%thread表示线程名，%-5level：级别从左显示5个字符宽度%msg：日志消息，%n是换行符-->
+            <pattern> %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{50} - %msg%n</pattern>
+        </encoder>
+        <!-- 所有error日志都在这里-->
+        <filter class="ch.qos.logback.classic.filter.LevelFilter">
+            <level>ERROR</level>
+            <onMatch>ACCEPT</onMatch>
+            <onMismatch>DENY</onMismatch>
+        </filter>
+    </appender>
+
+    <!-- rest template logger-->
+    <logger name="org.springframework.web.client.RestTemplate" level="DEBUG" />
+    <logger name="org.springframework" level="ERROR" />
+
+    <!-- jdbc-->
+    <logger name="org.hibernate.SQL" level="DEBUG"/>
+    <logger name="org.hibernate.engine.QueryParameters" level="DEBUG"/>
+    <logger name="org.hibernate.engine.query.HQLQueryPlan" level="DEBUG"/>
+    <logger name="org.hibernate.type.descriptor.sql.BasicBinder"  level="TRACE"/>
+    <logger name="org.hibernate.validator" level="INFO"/>
+    <logger name="org.hibernate.type.BasicTypeRegistry" level="INFO"/>
+    <logger name="org.hibernate.cfg" level="INFO"/>
+    <logger name="org.hibernate.id" level="INFO" />
+    <logger name="org.hibernate.hql.internal.ast.QueryTranslatorImpl" level="INFO" />
+    <logger name="org.hibernate.loader.plan.build" level="INFO" />
+    <logger name="org.hibernate.persister.walking.spi" level="INFO" />
+
+    <!-- HikariPool -->
+    <logger name="com.zaxxer.hikari.pool.HikariPool" level="INFO" />
+    <logger name="com.zaxxer.hikari.pool.PoolBase" level="INFO" />
+
+
+    <!-- zookeeper-->
+    <logger name="org.apache.zookeeper"    level="ERROR"  />
+    <logger name="org.apache.zookeeper.ZooKeeper"    level="INFO"  />
+    <logger name="org.apache.zookeeper.ClientCnxn"    level="INFO"  />
+
+    <!-- dubbo -->
+    <logger name="com.alibaba.dubbo.monitor" level="ERROR"/>
+    <logger name="com.alibaba.dubbo.remoting" level="ERROR" />
+    <logger name="com.reger.dubbo.rpc.filter.ProceedingJoinPoint" level="ERROR" />
+    <logger name="com.alibaba.dubbo.common.extension.ExtensionLoader"  level="ERROR"/>
+
+    <!-- netty-->
+    <logger name="io.netty.buffer" level="INFO"/>
+    <logger name="io.netty.util" level="INFO"/>
+
+    <logger name=" com.zaxxer.hikari" level="ERROR" />
+    <!-- 日志输出级别 -->
+    <root leve="${LOG_ROOT_LEVEL}">
+        <appender-ref ref="STDOUT"  />
+        <appender-ref ref="FILE_ALL" />
+        <appender-ref ref="FILE_ERR"  />
+    </root>
+    <!--错误日志会输出一份到error中-->
+    <!-- additivity=true会向上传递给上面root再输出一遍-->
+    <logger name="pubprice" level="INFO" additivity="false">
+        <appender-ref ref="FILE_ALL" />
+        <appender-ref ref="FILE_ERR"  />
+    </logger>
+</configuration>

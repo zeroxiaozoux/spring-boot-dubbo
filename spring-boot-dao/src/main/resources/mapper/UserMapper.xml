@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.zero.core.dao.user.UserDao">
+    <select id="getUserById" resultType="user">
+      select  * from user_do  where id = #{id};
+    </select>
+
+    <update id="updateUser" >
+        update user_do t set t.name  = #{name}  where id = #{id};
+    </update>
+
+    <insert id="insertUser" parameterType="user"  >
+        INSERT INTO user_do(name,email,age,sex) VALUES(#{name},#{email},#{age},#{sex});
+    </insert>
+
+    <select id="countUser"  resultType="int">
+        select  count(*)  from user_do  where sex = #{sex} ;
+    </select>
+
+</mapper>

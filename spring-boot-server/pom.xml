@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <artifactId>spring-boot-dubbo</artifactId>
+        <groupId>com.dubbo</groupId>
+        <version>2.0.0-SNAPSHOT</version>
+    </parent>
+    <artifactId>server</artifactId>
+    <version>2.0.0-SNAPSHOT</version>
+    <name>spring-boot-server</name>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.dubbo</groupId>
+            <artifactId>spring-boot-core</artifactId>
+        </dependency>
+<!--        <dependency> &lt;!&ndash; 打包需要加入，目前没找到原因&ndash;&gt;-->
+<!--            <groupId>com.dubbo</groupId>-->
+<!--            <artifactId>spring-boot-api</artifactId>-->
+<!--        </dependency>-->
+<!--        <dependency> &lt;!&ndash; 打包需要加入，目前没找到原因&ndash;&gt;-->
+<!--            <groupId>com.dubbo</groupId>-->
+<!--            <artifactId>spring-boot-common</artifactId>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>com.gitee.reger</groupId>-->
+<!--            <artifactId>spring-boot-starter-dubbo</artifactId>-->
+<!--        </dependency>-->
+<!--        <dependency>-->
+<!--            <groupId>com.dubbo</groupId>-->
+<!--            <artifactId>spring-boot-starter-dubbo</artifactId>-->
+<!--            <version>2.0.0-SNAPSHOT</version>-->
+<!--        </dependency>-->
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.junit.vintage</groupId>
+                    <artifactId>junit-vintage-engine</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <finalName>dubbo-server</finalName>
+            <resources>
+                <resource>
+                    <directory>${basedir}/src/main/resources</directory>
+                    <filtering>true</filtering>
+                    <includes>
+                        <include>**/application*.yml</include>
+                        <include>**/*.properties</include>
+                        <include>**/*.xml</include>
+                        <include>**/*.*</include>
+                    </includes>
+                </resource>
+            </resources>
+
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.zero.dubbo.DubboApplication</mainClass>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <skipTests>true</skipTests>    <!--默认关掉单元测试 -->
+                </configuration>
+            </plugin>
+
+        </plugins>
+        <filters>
+            <filter>src/main/resources/application-${env}.properties</filter>
+        </filters>
+    </build>
+
+</project>

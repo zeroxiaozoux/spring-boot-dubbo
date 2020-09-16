@@ -1,0 +1,2 @@
+regerConsumerFilter=com.dubbo.filter.ConsumerFilterBean
+regerProviderFilter=com.dubbo.filter.ProviderFilterBean
